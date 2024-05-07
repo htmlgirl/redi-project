@@ -84,6 +84,7 @@ class NewFilm {
 		this.renderFilmList();
 		this.sortSelectBlock = this.getSortSelectBlock();
 		this.addSortSelectBlockClickHandlers();
+		this.getFormData();
 	}
 
 
@@ -122,6 +123,30 @@ class NewFilm {
 		wrapMovies.innerHTML = htmlString;
 	}
 
+	getFormData() {
+		const formElement = document.getElementById('film_form'); // get the form element
+		formElement.addEventListener('submit', (e) => {
+		e.preventDefault();
+		const formData = new FormData(formElement); // create a FormData object, pass the form element to it
+		// now we can retrieve the data
+		const title = formData.get("title");
+		const year = formData.get("year");
+		const cast = formData.get("cast");
+		const poster = formData.get("poster");
+		const link = formData.get("link");
+
+		const data = {
+			title: title,
+			year: year,
+			cast: cast,
+			poster: poster,
+			link: link
+		};
+		console.log(data);
+		return data;
+	});
+
+	}
 	getSortSelectBlock() {
 		return document.querySelector('.movie_sort_options');
 	}
