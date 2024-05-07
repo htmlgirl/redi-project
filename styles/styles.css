@@ -173,12 +173,9 @@ textarea:focus {
 	width: 50%;
 }
 .film_form_input:nth-last-of-type(2n + 1) {
-	 padding-left: 16px;
- }
-.film_form_input:nth-last-of-type(2n) {
 	padding-right: 16px;
 }
-.film_form_input:nth-last-of-type(3) {
+.film_form_input:nth-last-of-type(4) {
 	max-width: 190px;
 }
 
@@ -322,8 +319,6 @@ input::placeholder {
 	}
 	.film_form_input:nth-last-of-type(2n + 1) {
 		padding-left: 0;
-	}
-	.film_form_input:nth-last-of-type(2n) {
 		padding-right: 0;
 	}
 	.movie_collection li {
