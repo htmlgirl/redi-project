@@ -82,6 +82,8 @@ class NewFilm {
 	constructor() {
 		this.appData = appDataExample;
 		this.renderFilmList();
+		this.sortSelectBlock = this.getSortSelectBlock();
+		this.addSortSelectBlockClickHandlers();
 	}
 
 
@@ -118,6 +120,35 @@ class NewFilm {
 
 		let wrapMovies = document.getElementById('movies');
 		wrapMovies.innerHTML = htmlString;
+	}
+
+	getSortSelectBlock() {
+		return document.querySelector('.movie_sort_options');
+	}
+	showSortSelectBlock() {
+		this.sortSelectBlock.style.display = 'block';
+	}
+
+	hideSortSelectBlock() {
+		this.sortSelectBlock.style.display = '';
+	}
+	addSortSelectBlockClickHandlers() {
+		const sortSelectBlockContainer = document.querySelector(".movie_sort_select");
+		const sortSelectBlockArrow = document.querySelector(".movie_sort__select_arrow svg");
+		sortSelectBlockContainer.addEventListener("click", (event) => {
+			const clickedSortChoiceButton = event.target;
+			if(this.sortSelectBlock.style.display === 'block') {
+				console.log(event.target, 111);
+				console.log(clickedSortChoiceButton.closest(".movie_sort_option"),1);
+				sortSelectBlockArrow.style.transform = '';
+				this.hideSortSelectBlock();
+			} else {
+				console.log(event.target, 222);
+				console.log(clickedSortChoiceButton.closest(".movie_sort_option"),2);
+				sortSelectBlockArrow.style.transform = 'rotate(-90deg)';
+				this.showSortSelectBlock();
+			}
+		});
 	}
 
 }
