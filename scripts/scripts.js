@@ -95,9 +95,13 @@ class NewFilm {
 		console.log(this.appData);
 		this.addFormListener();
 		this.renderFilmList();
+		this.sortOverlay = this.getOverlay();
 		this.delPopupElement = this.getDelPopupElement();
 		this.sortSelectBlock = this.getSortSelectBlock();
+		this.sortSelectBlockBtn = this.getSortSelectBlockBtn();
+		this.sortSelectBlockArrow = this.getSortSelectBlockArrow();
 		this.addSortSelectBlockClickHandlers();
+		this.addOverlayClickHandlers();
 		this.addDelPopupClickHandlers();
 		this.addDelButtonClickEventListener();
 	}
@@ -174,7 +178,9 @@ class NewFilm {
 
 		console.log(wrapMovies);
 	}
-
+	getOverlay() {
+		return document.querySelector(".overlay");;
+	}
 	getDelPopupElement() {
 		return document.querySelector('.modal');
 	}
@@ -188,29 +194,39 @@ class NewFilm {
 	getSortSelectBlock() {
 		return document.querySelector('.movie_sort_options');
 	}
+	getSortSelectBlockBtn() {
+		return document.querySelector(".sort_movies");
+	}
+	getSortSelectBlockArrow() {
+		return document.querySelector(".movie_sort__select_arrow svg");
+	}
 	showSortSelectBlock() {
 		this.sortSelectBlock.style.display = 'block';
+		this.sortOverlay.style.display = 'block';
+		this.sortSelectBlockArrow.style.transform = 'rotate(-90deg)';
 	}
 
 	hideSortSelectBlock() {
 		this.sortSelectBlock.style.display = '';
+		this.sortOverlay.style.display = '';
+		this.sortSelectBlockArrow.style.transform = '';
 	}
 	addSortSelectBlockClickHandlers() {
-		const sortSelectBlockContainer = document.querySelector(".movie_sort_select");
-		const sortSelectBlockArrow = document.querySelector(".movie_sort__select_arrow svg");
-		sortSelectBlockContainer.addEventListener("click", (event) => {
-			const clickedSortChoiceButton = event.target;
-			if(this.sortSelectBlock.style.display === 'block') {
-				console.log(event.target, 111);
-				console.log(clickedSortChoiceButton.closest(".movie_sort_option"),1);
-				sortSelectBlockArrow.style.transform = '';
+		this.sortSelectBlockBtn.addEventListener("click", (event) => {
+			this.showSortSelectBlock();
+		});
+
+		this.sortSelectBlock.addEventListener('click', (event) => {
+			const eventTarget = event.target;
+			if (eventTarget.closest('.movie_sort_btn')) {
 				this.hideSortSelectBlock();
-			} else {
-				console.log(event.target, 222);
-				console.log(clickedSortChoiceButton.closest(".movie_sort_option"),2);
-				sortSelectBlockArrow.style.transform = 'rotate(-90deg)';
-				this.showSortSelectBlock();
 			}
+		});
+	}
+
+	addOverlayClickHandlers() {
+		this.sortOverlay.addEventListener("click", (event) => {
+			this.hideSortSelectBlock();
 		});
 	}
 
