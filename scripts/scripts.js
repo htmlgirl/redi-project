@@ -1,3 +1,5 @@
+import { richDate } from '../node_modules/rich-date/rich-date.js';
+
 const appDataExample = {
 	films: [
 		{
@@ -9,7 +11,8 @@ const appDataExample = {
 			],
 			poster: 'https://t3.gstatic.com/licensed-image?q=tbn:ANd9GcQXUpVhfnjzY01pU1p4ta9hEhQ3gGsCooCyJ3M890P9UwzPG_yJW2EzvdnYta43RX8u',
 			link: '#',
-			id: 1
+			id: 1,
+			creationDate: '2011-01-26T13:51:50'
 		},
 		{
 			title: 'The Untamed',
@@ -20,7 +23,8 @@ const appDataExample = {
 			],
 			poster: 'https://upload.wikimedia.org/wikipedia/en/3/31/Theuntamed.jpg',
 			link: '#',
-			id: 2
+			id: 2,
+			creationDate: '2012-01-26T13:51:50'
 		},
 		{
 			title: 'Fantastic Beasts: The Crimes of Grindelwald',
@@ -39,7 +43,8 @@ const appDataExample = {
 			],
 			poster: 'https://upload.wikimedia.org/wikipedia/en/3/3c/Fantastic_Beasts_-_The_Crimes_of_Grindelwald_Poster.png',
 			link: '#',
-			id: 3
+			id: 3,
+			creationDate: '2013-01-26T13:51:50'
 		},
 		{
 			title: 'Teen Wolf',
@@ -53,7 +58,8 @@ const appDataExample = {
 			],
 			poster: 'https://avatars.mds.yandex.net/get-kinopoisk-image/1946459/6967c7f3-1f18-439f-b20e-1fa0334656c8/1920x',
 			link: '#',
-			id: 4
+			id: 4,
+			creationDate: '2015-01-26T13:51:50'
 		},
 		{
 			title: 'The Hobbit: The Battle of the Five Armies',
@@ -76,7 +82,8 @@ const appDataExample = {
 			],
 			poster: 'https://upload.wikimedia.org/wikipedia/en/e/e7/The_Hobbit_-_The_Battle_of_the_Five_Armies.png',
 			link: '#',
-			id: 5
+			id: 5,
+			creationDate: '2016-01-26T13:51:50'
 		}
 	]
 };
@@ -89,9 +96,33 @@ class NewFilm {
 	appData;
 	filmDelId;
 	delPopupElement;
+	sortTypes = [
+		{
+			id: 'def',
+			title: 'default'
+		},
+		{
+			id: '09',
+			title: 'years ascending'
+		},
+		{
+			id: '90',
+			title: 'years descending'
+		},
+		{
+			id: 'az',
+			title: 'name A-Z'
+		},
+		{
+			id: 'za',
+			title: 'name Z-A'
+		}
+	];
+	currentSortTypeId = this.sortTypes[0].id;
 
 	constructor() {
 		this.appData = this.getAppData();
+		this.updateFilmsOrder();
 		console.log(this.appData);
 		this.addFormListener();
 		this.renderFilmList();
@@ -100,6 +131,8 @@ class NewFilm {
 		this.sortSelectBlock = this.getSortSelectBlock();
 		this.sortSelectBlockBtn = this.getSortSelectBlockBtn();
 		this.sortSelectBlockArrow = this.getSortSelectBlockArrow();
+		this.sortBtnHeader = this.getSortBtnHeader();
+		this.renderSortBtnHeader();
 		this.addSortSelectBlockClickHandlers();
 		this.addOverlayClickHandlers();
 		this.addDelPopupClickHandlers();
@@ -113,6 +146,7 @@ class NewFilm {
 			e.preventDefault();
 			const formData = this.getFormData(formElement);
 			formData.id = this.getNewRecordId();
+			formData.creationDate = richDate().format('YYYY-MM-DDTHH:mm:ss');
 			this.appData.films.unshift(formData);
 			this.safeAppData();
 			this.renderFilmList();
@@ -218,10 +252,55 @@ class NewFilm {
 
 		this.sortSelectBlock.addEventListener('click', (event) => {
 			const eventTarget = event.target;
-			if (eventTarget.closest('.movie_sort_btn')) {
+			const sortBtn = eventTarget.closest('.movie_sort_btn');
+			if (sortBtn) {
 				this.hideSortSelectBlock();
+				this.currentSortTypeId = sortBtn.id;
+				this.renderSortBtnHeader();
+				this.updateFilmsOrder();
+				this.renderFilmList();
 			}
 		});
+	}
+
+	getSortBtnHeader() {
+		return document.querySelector(".sort_btn_header");
+	}
+	renderSortBtnHeader() {
+		this.sortBtnHeader.innerHTML = this.sortTypes.find((sortType) => {
+			if (sortType.id === this.currentSortTypeId) {
+				return true;
+			} else {
+				return false;
+			}
+		}).title;
+	}
+
+	updateFilmsOrder() {
+		switch (this.currentSortTypeId) {
+			case "09":
+				this.appData.films.sort((filmA, filmB) => {
+					return filmA.year - filmB.year;
+				});
+				break;
+			case "90":
+				this.appData.films.sort((filmA, filmB) => {
+					return filmB.year - filmA.year;
+				});
+				break;
+			case "az":
+				this.appData.films.sort((filmA, filmB) => filmA.title.localeCompare(filmB.title));
+				break;
+			case "za":
+				this.appData.films.sort((filmA, filmB) => filmB.title.localeCompare(filmA.title));
+				break;
+			default:
+				this.appData.films.sort((filmA, filmB) => {
+					const dateA = richDate(filmA.creationDate);
+					const dateB = richDate(filmB.creationDate);
+					return dateA.isAfter(dateB) ? -1 : 1;
+				});
+		}
 	}
 
 	addOverlayClickHandlers() {
