@@ -1,4 +1,4 @@
-import { richDate } from '../node_modules/rich-date/rich-date.js';
+import { richDate } from './rich-date.js';
 
 const appDataExample = {
 	films: [
