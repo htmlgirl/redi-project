@@ -172,10 +172,10 @@ textarea:focus {
 	flex-direction: column;
 	width: 50%;
 }
-.film_form_input:nth-last-of-type(2n + 1) {
+.film_form_input:nth-last-of-type(2n) {
 	padding-right: 16px;
 }
-.film_form_input:nth-last-of-type(4) {
+.film_form_input:nth-last-of-type(3) {
 	max-width: 190px;
 }
 
@@ -326,7 +326,7 @@ input::placeholder {
 	.film_form_input {
 		width: 100%;
 	}
-	.film_form_input:nth-last-of-type(2n + 1) {
+	.film_form_input:nth-last-of-type(2n) {
 		padding-left: 0;
 		padding-right: 0;
 	}
