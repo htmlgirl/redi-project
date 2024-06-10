@@ -150,6 +150,7 @@ class NewFilm {
 			this.appData.films.unshift(formData);
 			this.safeAppData();
 			this.renderFilmList();
+			this.addDelButtonClickEventListener();
 		});
 	}
 
@@ -259,6 +260,7 @@ class NewFilm {
 				this.renderSortBtnHeader();
 				this.updateFilmsOrder();
 				this.renderFilmList();
+				this.addDelButtonClickEventListener();
 			}
 		});
 	}
